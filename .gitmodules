@@ -1,0 +1,3 @@
+[submodule "static/jfi"]
+	path = static/jfi
+	url = https://github.com/sebmatton/jQuery-Flight-Indicators

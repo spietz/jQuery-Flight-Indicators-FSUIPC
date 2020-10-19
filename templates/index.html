@@ -1,0 +1,92 @@
+<!--
+
+jQuery Flight Indicators plugin
+By Sébastien Matton (seb_matton@hotmail.com)
+Published under GPLv3 License.
+
+https://github.com/sebmatton/jQuery-Flight-Indicators
+
+ -->
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <!-- Syntax coloration -->
+    <link rel="stylesheet" type="text/css" href={{url_for("static", filename="jfi/_examples_data/prism/prism.css")}} />
+    <!-- This page style -->
+    <link rel="stylesheet" type="text/css" href={{url_for("static", filename="jfi/_examples_data/style.css")}} />
+    <!-- Flight Indicators library styles -->
+    <link rel="stylesheet" type="text/css" href={{url_for("static", filename="jfi/css/flightindicators.css")}} />
+    <title>jQuery Flight Indicators Plugin</title>
+</head>
+<body>
+<div class="container">
+
+    <div class="examples">
+        <div>
+            <span id="airspeed"></span>
+            <span id="attitude"></span>
+            <span id="altimeter"></span>
+        </div>
+        <div>
+            <p>Last synced ({{host}}):</p>
+            <p id="output"></p>
+        </div>
+    </div>
+
+<!-- Syntax color -->
+<script src={{url_for("static", filename="jfi/_examples_data/prism/prism.js")}}></script>
+
+<!-- Importing jQuery library -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+
+<!-- Importing the FlightIndicators library -->
+<script src={{url_for("static", filename="jfi/js/jquery.flightindicators.js")}}></script>
+
+<!-- Let start our scripts -->
+<script>
+
+    var ms_update = 100;
+    var size = 250;
+    var img_dir = "{{url_for("static", filename="img/")}}";
+    var url = "http://{{host}}:5000/values";
+
+    // Init gauges
+    var attitude = $.flightIndicator('#attitude', 'attitude', {roll:50, pitch:-20, size:size, showBox : true, img_directory:img_dir});
+    var airspeed = $.flightIndicator('#airspeed', 'airspeed', {showBox: false, size:size, img_directory:img_dir});
+    var altimeter = $.flightIndicator('#altimeter', 'altimeter', {showBox:false, size:size, img_directory:img_dir});
+
+    // Sync status indicator
+    document.getElementById("output").innerHTML = "Never";
+
+    // Update values
+    var sim = {};
+    setInterval(function() {
+        $.ajax({
+          dataType: "json",
+          url: url,
+          data: sim,
+          success: onSuccess
+        });
+    }, ms_update);
+
+    function onSuccess(sim){
+
+        var now = new Date();
+        document.getElementById("output").innerHTML = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+
+        // Airspeed update
+        airspeed.setAirSpeed(sim.airspeed);
+
+        // Attitude update
+        attitude.setRoll(sim.roll);
+        attitude.setPitch(sim.pitch);
+
+        // Altimeter update
+        altimeter.setAltitude(sim.altitude);
+        altimeter.setPressure(sim.pressure);
+
+    };
+
+</script>
+</body>
+</html>
