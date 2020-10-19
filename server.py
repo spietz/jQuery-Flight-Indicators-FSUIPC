@@ -16,12 +16,14 @@ CORS(app)  # making cross-origin AJAX possible.
 # see fsuipc documentation for offsets and types
 fsuipc = FSUIPC()  # open link
 fsuipc_setup = { # offset, type, transform
-    'roll':(0x057C, "d", lambda x: int(-(x*(360./65536.)/65536.))),
+    'roll':(0x057C, "d", lambda x: int(x*(360./65536.)/65536.)),
     'pitch':(0x0578, "d", lambda x: int(-(x*(360./65536.)/65536.))),
     'heading':(0x0580, "d", lambda x: int(x*(360./65536.)/65536.)),
     'airspeed':(0x02BC, "d", lambda x: int(x/128.)),
     'altitude':(0x0574, "d", lambda x: int(x*3.28084)),
-    'vertspeed':(0x02C8, "d", lambda x: int(x*60*3.28084/256.))
+    'pressure':(0x0330, "h", lambda x: int(x/16.)),
+    'vertspeed':(0x02C8, "d", lambda x: x*60.*3.28084/256./1000.),
+    'tc_ball':(0x036E, "c", lambda x: x)
 }
 prepared = fsuipc.prepare_data([(v[0], v[1]) for k, v in fsuipc_setup.items()], True)  # prepare readings
 

@@ -28,6 +28,11 @@ https://github.com/sebmatton/jQuery-Flight-Indicators
             <span id="altimeter"></span>
         </div>
         <div>
+            <span id="turn_coordinator"></span>
+            <span id="heading"></span>
+            <span id="variometer"></span>
+        </div>
+        <div>
             <p>Last synced ({{host}}):</p>
             <p id="output"></p>
         </div>
@@ -47,13 +52,17 @@ https://github.com/sebmatton/jQuery-Flight-Indicators
 
     var ms_update = 100;
     var size = 250;
-    var img_dir = "{{url_for("static", filename="img/")}}";
+    var img_dir = "{{url_for("static", filename="jfi/img/")}}";
     var url = "http://{{host}}:5000/values";
 
     // Init gauges
-    var attitude = $.flightIndicator('#attitude', 'attitude', {roll:50, pitch:-20, size:size, showBox : true, img_directory:img_dir});
-    var airspeed = $.flightIndicator('#airspeed', 'airspeed', {showBox: false, size:size, img_directory:img_dir});
+    var attitude = $.flightIndicator('#attitude', 'attitude', {showBox:true, size:size, img_directory:img_dir});
+    var airspeed = $.flightIndicator('#airspeed', 'airspeed', {showBox:false, size:size, img_directory:img_dir});
     var altimeter = $.flightIndicator('#altimeter', 'altimeter', {showBox:false, size:size, img_directory:img_dir});
+
+    var heading = $.flightIndicator('#heading', 'heading', {showBox:false, size:size, img_directory:img_dir});
+    var variometer = $.flightIndicator('#variometer', 'variometer', {showBox:false, size:size, img_directory:img_dir});
+    var turn_coordinator = $.flightIndicator('#turn_coordinator', 'turn_coordinator', {showBox:false, size:size, img_directory:img_dir});
 
     // Sync status indicator
     document.getElementById("output").innerHTML = "Never";
@@ -84,6 +93,15 @@ https://github.com/sebmatton/jQuery-Flight-Indicators
         // Altimeter update
         altimeter.setAltitude(sim.altitude);
         altimeter.setPressure(sim.pressure);
+
+        // Vario update
+        variometer.setVario(sim.vertspeed);
+
+        // Heading update
+        heading.setHeading(sim.heading);
+
+        // TC update
+        turn_coordinator.setTurn(sim.tc_ball);
 
     };
 

@@ -1,6 +1,6 @@
 # The jQuery Flight Indicators Plugin linked to FSUIPC
 
-The [Flight Indicators jQuery Plugin](https://github.com/tjensen/fsuipc)
+The [Flight Indicators jQuery Plugin](https://github.com/sebmatton/jQuery-Flight-Indicators)
 is linked to [FSUIPC](http://www.fsuipc.com/) to display flight simulator
 (e.g. msfs2020) instruments from any device on the local network using
 Flask.
@@ -26,6 +26,5 @@ python3 server.py
 
 ## TODO
 - [ ] do not use hardcoded update interval
-- [ ] enable all instruments from plugin
 - [ ] background texture
 - [ ] full screen mode
